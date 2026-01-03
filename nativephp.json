@@ -1,0 +1,35 @@
+{
+    "namespace": "File",
+
+    "bridge_functions": [
+        {
+            "name": "File.Move",
+            "android": "com.nativephp.file.FileFunctions.Move",
+            "ios": "FileFunctions.Move",
+            "description": "Move a file from one location to another"
+        },
+        {
+            "name": "File.Copy",
+            "android": "com.nativephp.file.FileFunctions.Copy",
+            "ios": "FileFunctions.Copy",
+            "description": "Copy a file from one location to another"
+        }
+    ],
+
+    "android": {
+        "permissions": [],
+        "dependencies": {
+            "implementation": []
+        }
+    },
+
+    "ios": {
+        "info_plist": {},
+        "dependencies": {
+            "swift_packages": [],
+            "pods": []
+        }
+    },
+
+    "events": []
+}
