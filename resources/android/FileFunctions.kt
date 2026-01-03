@@ -1,6 +1,8 @@
 package com.nativephp.file
 
+import android.content.Context
 import android.util.Log
+import androidx.fragment.app.FragmentActivity
 import com.nativephp.mobile.bridge.BridgeFunction
 import java.io.File
 
@@ -19,7 +21,7 @@ object FileFunctions {
      *   - success: boolean - Whether the operation succeeded
      *   - error: string (optional) - Error message if operation failed
      */
-    class Move : BridgeFunction {
+    class Move(private val activity: FragmentActivity) : BridgeFunction {
         override fun execute(parameters: Map<String, Any>): Map<String, Any> {
             val from = parameters["from"] as? String
             val to = parameters["to"] as? String
@@ -92,7 +94,7 @@ object FileFunctions {
      *   - success: boolean - Whether the operation succeeded
      *   - error: string (optional) - Error message if operation failed
      */
-    class Copy : BridgeFunction {
+    class Copy(private val activity: FragmentActivity) : BridgeFunction {
         override fun execute(parameters: Map<String, Any>): Map<String, Any> {
             val from = parameters["from"] as? String
             val to = parameters["to"] as? String
