@@ -91,39 +91,31 @@ Copies a file from source to destination.
 
 ## Examples
 
-### Move Recording to Permanent Storage
+### Move File to Permanent Storage
 
 ```php
 use Native\Mobile\Facades\File;
-use Native\Mobile\Events\Microphone\RecordingFinished;
 
-#[OnNative(RecordingFinished::class)]
-public function handleRecording($path, $duration)
-{
-    $newPath = storage_path("recordings/" . basename($path));
+$tempPath = '/var/mobile/Containers/Data/tmp/recording.m4a';
+$permanentPath = storage_path('recordings/recording.m4a');
 
-    $result = File::move($path, $newPath);
+$result = File::move($tempPath, $permanentPath);
 
-    if ($result['success']) {
-        // Save to database
-        Recording::create([
-            'path' => $newPath,
-            'duration' => $duration
-        ]);
-    }
+if ($result['success']) {
+    // File moved successfully
 }
 ```
 
-### Backup Photo Before Edit
+### Backup File Before Edit
 
 ```php
 use Native\Mobile\Facades\File;
 
-public function editPhoto($photoPath)
+public function editFile($filePath)
 {
     // Create backup
-    $backupPath = str_replace('.jpg', '_backup.jpg', $photoPath);
-    File::copy($photoPath, $backupPath);
+    $backupPath = str_replace('.txt', '_backup.txt', $filePath);
+    File::copy($filePath, $backupPath);
 
     // Proceed with editing...
 }

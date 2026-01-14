@@ -2,100 +2,63 @@
 
 File operations (move, copy) for NativePHP Mobile applications.
 
-### Installation
-
-```bash
-composer require nativephp/file
-php artisan native:plugin:register nativephp/file
-```
-
 ### PHP Usage (Livewire/Blade)
 
-Use the `File` facade:
-
 @verbatim
-<code-snippet name="File Operations" lang="php">
+<code-snippet name="Move File" lang="php">
 use Native\Mobile\Facades\File;
 
-// Move a file
-$result = File::move('/path/to/source.txt', '/path/to/destination.txt');
-
-if ($result['success']) {
-    echo 'File moved successfully!';
-}
-
-// Copy a file
-$result = File::copy('/path/to/source.txt', '/path/to/copy.txt');
-
-if ($result['success']) {
-    echo 'File copied successfully!';
-}
+$success = File::move(
+    '/var/mobile/Containers/Data/tmp/photo.jpg',
+    '/var/mobile/Containers/Data/Documents/photos/photo.jpg'
+);
 </code-snippet>
 @endverbatim
 
 @verbatim
-<code-snippet name="Moving Recordings to Storage" lang="php">
+<code-snippet name="Copy File" lang="php">
 use Native\Mobile\Facades\File;
-use Native\Mobile\Events\Microphone\RecordingFinished;
 
-#[OnNative(RecordingFinished::class)]
-public function handleRecording($path, $duration)
-{
-    $newPath = storage_path("recordings/" . basename($path));
-
-    $result = File::move($path, $newPath);
-
-    if ($result['success']) {
-        Recording::create([
-            'path' => $newPath,
-            'duration' => $duration
-        ]);
-    }
-}
+$success = File::copy(
+    '/var/mobile/Containers/Data/Documents/document.pdf',
+    '/var/mobile/Containers/Data/Documents/backups/document.pdf'
+);
 </code-snippet>
 @endverbatim
 
-### JavaScript Usage
+### JavaScript Usage (Vue/React/Inertia)
 
 @verbatim
-<code-snippet name="File Operations in JavaScript" lang="js">
+<code-snippet name="File Operations in JavaScript" lang="javascript">
 import { file } from '#nativephp';
 
 // Move a file
-const moveResult = await file.move('/path/to/source.txt', '/path/to/destination.txt');
-
-if (moveResult.success) {
-    console.log('File moved successfully!');
-}
+const moveResult = await file.move(
+    '/var/mobile/Containers/Data/tmp/photo.jpg',
+    '/var/mobile/Containers/Data/Documents/photos/photo.jpg'
+);
 
 // Copy a file
-const copyResult = await file.copy('/path/to/source.txt', '/path/to/copy.txt');
-
-if (copyResult.success) {
-    console.log('File copied successfully!');
-}
+const copyResult = await file.copy(
+    '/var/mobile/Containers/Data/Documents/document.pdf',
+    '/var/mobile/Containers/Data/Documents/backups/document.pdf'
+);
 </code-snippet>
 @endverbatim
 
-### Available Methods
+### Methods
 
-- `File::move(string $from, string $to)` - Move file from source to destination
-- `File::copy(string $from, string $to)` - Copy file from source to destination
+- `File::move(string $from, string $to)` - Relocates file, removes original after transfer
+- `File::copy(string $from, string $to)` - Duplicates file, preserves original
 
-### Return Values
+### Returns
 
-Both methods return an array:
-- `success: bool` - Whether the operation succeeded
-- `error: string` - Error message if operation failed (optional)
+Both methods return boolean (true for success, false for failure).
 
-### Behavior
+### Important Notes
 
-- Parent directories are created automatically if they don't exist
-- Existing destination files are overwritten
-- File integrity is verified after copy operations
-- On Android, if rename fails (cross-filesystem), falls back to copy + delete
-
-### Platform Details
-
-- **iOS**: Uses FileManager for all operations
-- **Android**: Uses Java File API with automatic directory creation
+- Requires absolute file paths; use Laravel's `storage_path()` helper
+- Source file and destination directory must exist and be accessible
+- Returns false if source doesn't exist or destination already exists
+- Operations execute synchronously and block until completion
+- No events dispatched; results returned directly
