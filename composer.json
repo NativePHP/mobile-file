@@ -1,6 +1,5 @@
 {
     "name": "nativephp/mobile-file",
-    "version": "0.0.4",
     "description": "File operations plugin for NativePHP Mobile",
     "type": "nativephp-plugin",
     "license": "MIT",
