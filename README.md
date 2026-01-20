@@ -120,7 +120,3 @@ public function editFile($filePath)
     // Proceed with editing...
 }
 ```
-
-## License
-
-MIT
