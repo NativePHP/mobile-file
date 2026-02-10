@@ -37,17 +37,17 @@ if ($result['success']) {
 ### JavaScript (Vue/React/Inertia)
 
 ```js
-import { file } from '#nativephp';
+import { File } from '#nativephp';
 
 // Move a file
-const result = await file.move('/path/to/source.txt', '/path/to/destination.txt');
+const result = await File.move('/path/to/source.txt', '/path/to/destination.txt');
 
 if (result.success) {
     console.log('File moved successfully!');
 }
 
 // Copy a file
-const result = await file.copy('/path/to/source.txt', '/path/to/copy.txt');
+const result = await File.copy('/path/to/source.txt', '/path/to/copy.txt');
 
 if (result.success) {
     console.log('File copied successfully!');
