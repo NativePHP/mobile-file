@@ -1,6 +1,5 @@
 {
     "namespace": "File",
-
     "bridge_functions": [
         {
             "name": "File.Move",
@@ -15,15 +14,13 @@
             "description": "Copy a file from one location to another"
         }
     ],
-
     "android": {
-        "min_version": 33,
+        "min_version": 26,
         "permissions": [],
         "dependencies": {
             "implementation": []
         }
     },
-
     "ios": {
         "min_version": "18.2",
         "info_plist": {},
@@ -32,6 +29,5 @@
             "pods": []
         }
     },
-
     "events": []
 }
