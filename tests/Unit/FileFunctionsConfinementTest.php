@@ -75,3 +75,14 @@ it('denies the sensitive sinks that sit inside an allowed tree', function (strin
     // framework/logs need an explicit deny inside the allowed tree.
     'Android denies storage internals' => [$android, ['deniedRoots', '/framework', '/logs']],
 ]);
+
+it('refuses a destination whose leaf is a symlink, on both platforms', function (string $path, string $needle) {
+    // canonical() resolves the parent but, for a dangling-symlink destination,
+    // keeps the in-root leaf name — the copy/move would then follow the link out
+    // of the allowed tree. Each twin refuses a symlink leaf (iOS lstats via
+    // attributesOfItem; Android compares the leaf's canonical and absolute paths).
+    expect(fileFunctionsSource($path))->toContain($needle);
+})->with([
+    'iOS lstats the dest leaf' => [$ios, 'typeSymbolicLink'],
+    'Android checks the dest leaf link' => [$android, 'leaf.canonicalPath != leaf.absolutePath'],
+]);

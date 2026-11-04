@@ -99,6 +99,19 @@ object FileFunctions {
             return mapOf("success" to false, "error" to "Destination path is not allowed")
         }
 
+        // A destination whose leaf is itself a symlink must be refused: a
+        // dangling link can keep an in-root canonical path, and the copy/move
+        // then follows it out of the allowed tree. Detect the link without
+        // following it (its canonical path differs from its absolute path).
+        val canonicalParent = File(to).absoluteFile.parentFile?.canonicalFile
+        if (canonicalParent != null) {
+            val leaf = File(canonicalParent, File(to).name)
+            if (leaf.canonicalPath != leaf.absolutePath) {
+                Log.w("FileFunctions", "File op refused: destination leaf is a symlink")
+                return mapOf("success" to false, "error" to "Destination path is not allowed")
+            }
+        }
+
         return null
     }
 
